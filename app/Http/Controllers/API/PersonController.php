@@ -29,5 +29,38 @@ class PersonController extends Controller
             return response()->json(['error' => $th->getMessage()], 500);
         }
     }
+
+    public function getById($id){
+        try {
+            $data = Person::find($id);
+            return response()->json($data, 200);
+        } catch (\Throwable $th) {
+            return response()->json( ['error'=> $th->getMessage()], 500 );
+        }
+    }
+
+    public function update(Request $request, $id){
+        try {
+            $data['name'] = $request['name'];
+            $data['address'] = $request['address'];
+            $data['phone'] = $request['phone'];
+            $data['city'] = $request['city'];
+            Person::find($id)->update($data);
+            $res = Person::find($id);
+            return response()->json($res, 200);
+        } catch (\Throwable $th) {
+            return response()->json( ['error' => $th->getMessage()], 500 ) ;
+        }
+    }
+
+    public function delete($id){
+        try {
+            $res = Person::find($id)->delete();
+            return response()->json(["deleted" => $res], 200);
+        } catch (\Throwable $th) {
+            return response()->json([ 'error' => $th->getMessage()],500);
+        }
+    }
+
 }
 
